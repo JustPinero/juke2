@@ -19,11 +19,9 @@ export default class SingleAlbum extends Component {
         // console.log('THIS IS THE THE ALBUM LOOK AT ME', album)
         this.setState({ selectedAlbum: album })
       });
-  };
+  }
 
   render () {
-
-    console.log("THIS IS ALBUM NUMBER @@@@", album)
     const album = this.state.selectedAlbum;
     return (
       <div className="album">
