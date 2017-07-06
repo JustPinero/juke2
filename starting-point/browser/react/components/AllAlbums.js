@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default class AllAlbums extends Component {
   render () {
     const albums = this.props.albums;
-
+    console.log("ALL ALBUMS IS RUNNING!!!", albums)
     return (
       <div>
         <h3>Albums</h3>

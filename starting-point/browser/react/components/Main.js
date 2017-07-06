@@ -6,7 +6,8 @@ import SingleAlbum from './SingleAlbum';
 import SingleArtist from './SingleArtist';
 import Sidebar from './Sidebar';
 import Player from './Player';
-import {HashRouter, Route} from 'react-router-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
+import NotFound from './404'
 
 export default class Main extends Component {
 
@@ -22,11 +23,14 @@ export default class Main extends Component {
           <Sidebar deselectAlbum={this.deselectAlbum} />
         </div>
         <div className="col-xs-10">
-          <Route exact path='/' component={StatefulAlbums}></Route>
-          <Route path='/albums/:albumId' component={SingleAlbum}></Route>
-          <Route exact path='/albums' component={StatefulAlbums}></Route>
-          <Route exact path='/artists' component={AllArtists}></Route>
-          <Route exact path='/artists/:artistId' component={SingleArtist}></Route>
+          <Switch>
+            <Route exact path='/' component={StatefulAlbums}></Route>
+            <Route exact path='/albums/:albumId' component={SingleAlbum}></Route>
+            <Route exact path='/albums' component={StatefulAlbums}></Route>
+            <Route exact path='/artists' component={AllArtists}></Route>
+            <Route path='/artists/:artistId' component={SingleArtist}></Route>
+            <Route path='/' render={ (routeProps)=> <NotFound location={routeProps.location}/>}/>
+          </Switch>
         </div>
         <Player />
       </div>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AllAlbums from '../components/AllAlbums';
+import axios from 'axios';
 
 export default class StatefulAlbums extends Component {
   constructor (props) {

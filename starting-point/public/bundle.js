@@ -8011,7 +8011,7 @@ var AllAlbums = function (_Component) {
     key: 'render',
     value: function render() {
       var albums = this.props.albums;
-
+      console.log("ALL ALBUMS IS RUNNING!!!", albums);
       return _react2.default.createElement(
         'div',
         null,
@@ -12198,6 +12198,10 @@ var _Player2 = _interopRequireDefault(_Player);
 
 var _reactRouterDom = __webpack_require__(31);
 
+var _ = __webpack_require__(258);
+
+var _2 = _interopRequireDefault(_);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -12232,11 +12236,18 @@ var Main = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'col-xs-10' },
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _StatefulAlbums2.default }),
-            _react2.default.createElement(_reactRouterDom.Route, { path: '/albums/:albumId', component: _SingleAlbum2.default }),
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/albums', component: _StatefulAlbums2.default }),
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/artists', component: _AllArtists2.default }),
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/artists/:artistId', component: _SingleArtist2.default })
+            _react2.default.createElement(
+              _reactRouterDom.Switch,
+              null,
+              _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _StatefulAlbums2.default }),
+              _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/albums/:albumId', component: _SingleAlbum2.default }),
+              _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/albums', component: _StatefulAlbums2.default }),
+              _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/artists', component: _AllArtists2.default }),
+              _react2.default.createElement(_reactRouterDom.Route, { path: '/artists/:artistId', component: _SingleArtist2.default }),
+              _react2.default.createElement(_reactRouterDom.Route, { path: '/', render: function render(routeProps) {
+                  return _react2.default.createElement(_2.default, { location: routeProps.location });
+                } })
+            )
           ),
           _react2.default.createElement(_Player2.default, null)
         )
@@ -13383,6 +13394,11 @@ var SingleAlbum = function (_Component) {
             null,
             album.name
           ),
+          _react2.default.createElement(
+            'a',
+            { href: 'mailto:someone@example.com?Subject=' + album.name + '&body=Check%20out%20this%20groovy%20album%20http://localhost:1337' + this.props.location.pathname, target: '_top' },
+            _react2.default.createElement('span', { className: 'glyphicon glyphicon-share' })
+          ),
           _react2.default.createElement('img', { src: album.imageUrl, className: 'img-thumbnail' })
         ),
         _react2.default.createElement(_Songs2.default, { songs: album.songs })
@@ -13473,49 +13489,54 @@ var SingleArtist = function (_Component) {
       var artist = this.state.artist;
       var artistAlbums = this.state.artistAlbums;
       var artistSongs = this.state.artistSongs;
-      return (
-        // <div className="album">
-        //   <h1>{artist.name}</h1>
-        //   <AllAlbums albums ={artistAlbums} />
-        //   <Songs songs={artistSongs} />
-        // </div>
+      console.log("Artist Albums:    ", artistAlbums);
+      return _react2.default.createElement(
+        'div',
+        null,
         _react2.default.createElement(
-          'div',
+          'h3',
           null,
+          artist.name
+        ),
+        _react2.default.createElement(
+          'ul',
+          { className: 'nav nav-tabs' },
           _react2.default.createElement(
-            'h3',
+            'li',
             null,
-            artist.name
-          ),
-          _react2.default.createElement(
-            'ul',
-            { className: 'nav nav-tabs' },
             _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _reactRouterDom.Link,
-                { to: '/artistAlbums' },
-                'ALBUMS'
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _reactRouterDom.Link,
-                { to: 'TODO' },
-                'SONGS'
-              )
+              _reactRouterDom.NavLink,
+              { to: '/artists/' + artist.id + '/artistAlbums', ActiveClassName: 'selected', activeStyle: {
+                  fontWeight: 'bold',
+                  color: 'White',
+                  backgroundColor: 'Grey'
+                } },
+              'ALBUMS'
             )
           ),
           _react2.default.createElement(
-            _reactRouterDom.HashRouter,
+            'li',
             null,
-            _react2.default.createElement(_reactRouterDom.Route, { path: '/artistAlbums', render: function render() {
-                return _react2.default.createElement(_AllAlbums2.default, { albums: artistAlbums });
-              } })
+            _react2.default.createElement(
+              _reactRouterDom.NavLink,
+              { to: '/artists/' + artist.id + '/artistSongs', ActiveClassName: 'selected', activeStyle: {
+                  fontWeight: 'bold',
+                  color: 'Black',
+                  backgroundColor: 'White'
+                } },
+              'SONGS'
+            )
           )
+        ),
+        _react2.default.createElement(
+          _reactRouterDom.Switch,
+          null,
+          _react2.default.createElement(_reactRouterDom.Route, { path: '/artists/' + artist.id + '/artistAlbums', render: function render() {
+              return _react2.default.createElement(_AllAlbums2.default, { albums: artistAlbums });
+            } }),
+          _react2.default.createElement(_reactRouterDom.Route, { path: '/artists/' + artist.id + '/artistSongs', render: function render() {
+              return _react2.default.createElement(_Songs2.default, { songs: artistSongs });
+            } })
         )
       );
     }
@@ -13523,6 +13544,13 @@ var SingleArtist = function (_Component) {
 
   return SingleArtist;
 }(_react.Component);
+
+// <div className="album">
+//   <h1>{artist.name}</h1>
+//   <AllAlbums albums ={artistAlbums} />
+//   <Songs songs={artistSongs} />
+// </div>
+
 
 exports.default = SingleArtist;
 
@@ -13546,6 +13574,10 @@ var _react2 = _interopRequireDefault(_react);
 var _AllAlbums = __webpack_require__(69);
 
 var _AllAlbums2 = _interopRequireDefault(_AllAlbums);
+
+var _axios = __webpack_require__(25);
+
+var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13574,7 +13606,7 @@ var StatefulAlbums = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios.get('/api/albums/').then(function (res) {
+      _axios2.default.get('/api/albums/').then(function (res) {
         return res.data;
       }).then(function (albums) {
         _this2.setState({ albums: albums });
@@ -28031,6 +28063,36 @@ var valueEqual = function valueEqual(a, b) {
 };
 
 exports.default = valueEqual;
+
+/***/ }),
+/* 258 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NotFound = function NotFound(props) {
+  console.log(props);
+  return _react2.default.createElement(
+    'h1',
+    null,
+    ' ',
+    props.location.pathname,
+    ' Not Found '
+  );
+};
+
+exports.default = NotFound;
 
 /***/ })
 /******/ ]);
